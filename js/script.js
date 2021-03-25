@@ -172,6 +172,7 @@ let preQuestions =
         }];
 
 let next = document.querySelector('.next');
+let previous = document.querySelector('.previous');
 
 let question = document.querySelector('.question');
 let answers = document.querySelectorAll('.list-group-item');
@@ -181,9 +182,41 @@ let restart = document.querySelector('.restart');
 let index = 0;
 let points = 0;
 
+
+function setQuestion(index) {
+   //clearClass();
+   question.innerHTML = preQuestions[index].question;
+
+
+	if (preQuestions[index].answers.length === 2) {
+		answers[2].style.display = 'none';
+		answers[3].style.display = 'none';
+	} else {
+		answers[2].style.display = 'block';
+		answers[3].style.display = 'block';
+	}
+
+   answers[0].innerHTML = preQuestions[index].answers[0];
+   answers[1].innerHTML = preQuestions[index].answers[1];
+   answers[2].innerHTML = preQuestions[index].answers[2];
+   answers[3].innerHTML = preQuestions[index].answers[3];
+}
+
+
+
 for (let i = 0; i < answers.length; i++) {
     answers[i].addEventListener('click', doAction);
 }
+
+setQuestion(index)
+
+function activateAnswers() {
+   for (let i = 0; i < answers.length; i++) {
+      answers[i].addEventListener('click', doAction);
+   }
+
+}
+activateAnswers();
 
 function doAction(event) {
     //event.target - Zwraca referencję do elementu, do którego zdarzenie zostało pierwotnie wysłane.
@@ -196,7 +229,45 @@ function doAction(event) {
         markInCorrect(event.target);
     }
     disableAnswers();
+	
 }
+
+
+function markCorrect(elem) {
+   elem.classList.add('correct');
+}
+
+function markInCorrect(elem) {
+   elem.classList.add('incorrect');
+}
+
+function disableAnswers() {
+   for (let i = 0; i < answers.length; i++) {
+      answers[i].removeEventListener('click', doAction);
+	  
+   }
+   
+}
+
+
+
+next.addEventListener('click', function () {
+	
+	if (index<20){
+		index++;
+		setQuestion(index);
+		activateAnswers();
+	}
+});
+
+previous.addEventListener('click', function () {
+    if(index > 0){
+        index--;
+        setQuestion(index);
+        activateAnswers();
+    }
+});
+
 
 
 
